@@ -59,7 +59,7 @@ jobs:
 
       - name: Set platforms
         run: |
-          echo "PLATFORMS=linux/amd64,linux/arm64,linux/arm/v7" >> $GITHUB_ENV
+          echo "PLATFORMS=linux/amd64,linux/arm64" >> $GITHUB_ENV
 
       - name: Publish Docker image
         uses: docker/build-push-action@v6

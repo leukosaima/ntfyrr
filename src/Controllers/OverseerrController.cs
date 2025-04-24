@@ -24,15 +24,8 @@ public class OverseerrController : ControllerBase
         {
             return BadRequest("Invalid payload.");
         }
-        
-        var ntfyMsg = new NtfyModel
-        {
-            Title = payload.subject,
-            Message = payload.message
-        };
 
-        // Forward the selected information to the external API
-        var result = await _ntfyApiService.SendDataAsync(ntfyMsg);
+        var result = await _ntfyApiService.SendDataAsync(OverseerrToNtfy.Convert(payload));
 
         if (result)
         {

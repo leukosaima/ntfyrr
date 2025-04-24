@@ -23,6 +23,7 @@ public class NtfyApiService
         content.Headers.Add("X-Title", data.Title);
         content.Headers.Add("X-Priority", data.Priority.ToString());
         content.Headers.Add("X-Tag", data.Tags);
+        content.Headers.Add("X-Markdown", "true");
 
         var response = await _httpClient.PostAsync($"{DotNetEnv.Env.GetString("NTFY_URL", "https://ntfy.sh")}/{DotNetEnv.Env.GetString("TOPIC_NAME")}", content);
 

@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 WORKDIR /app
 
-COPY . ./
+COPY ./src ./
 
 RUN dotnet restore
 

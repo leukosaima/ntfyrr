@@ -1,0 +1,80 @@
+name: docker
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate Docker tags and labels
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ github.event.repository.full_name }}
+            ghcr.io/${{ github.event.repository.full_name }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=ref,event=branch
+            type=ref,event=pr
+          flavor: |
+            latest=${{ github.event.release.prerelease == false }}
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Set platforms
+        run: |
+          echo "PLATFORMS=linux/amd64,linux/arm64,linux/arm/v7" >> $GITHUB_ENV
+
+      - name: Publish Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: ${{ env.PLATFORMS }}
+          push: true 
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Check manifest
+        run: |
+          docker buildx imagetools inspect ${{ github.event.repository.full_name }}:${{ steps.meta.outputs.version }}
+
+      - name: Inspect image
+        run: |
+          docker pull ${{ github.event.repository.full_name }}:${{ steps.meta.outputs.version }}
+          docker image inspect ${{ github.event.repository.full_name }}:${{ steps.meta.outputs.version }}

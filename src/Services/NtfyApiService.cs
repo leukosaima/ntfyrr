@@ -17,13 +17,15 @@ public class NtfyApiService
     /// Sends data to the ntfy.sh API.
     /// https://docs.ntfy.sh/publish/
     /// </summary>
-    public async Task<bool> SendDataAsync(NtfyModel data)
+    public async Task<bool> SendDataAsync(NtfyModel model)
     {
-        var content = new StringContent(data.Message, Encoding.UTF8, MediaTypeNames.Text.Plain);
-        content.Headers.Add("X-Title", data.Title);
-        content.Headers.Add("X-Priority", data.Priority.ToString());
-        content.Headers.Add("X-Tag", data.Tags);
+        var content = new StringContent(model.Message, Encoding.UTF8, MediaTypeNames.Text.Plain);
+        content.Headers.Add("X-Attach", model.Attach);
+        content.Headers.Add("X-Icon", model.Icon);
         content.Headers.Add("X-Markdown", "true");
+        content.Headers.Add("X-Priority", model.Priority.ToString());
+        content.Headers.Add("X-Tags", model.Tags);
+        content.Headers.Add("X-Title", model.Title);
 
         var response = await _httpClient.PostAsync($"{DotNetEnv.Env.GetString("NTFY_URL", "https://ntfy.sh")}/{DotNetEnv.Env.GetString("TOPIC_NAME")}", content);
 

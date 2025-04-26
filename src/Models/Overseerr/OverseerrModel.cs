@@ -42,6 +42,18 @@ public class OverseerrModel
     [JsonPropertyName("image")]
     public string Image { get; set; } = string.Empty;
 
+    [JsonPropertyName("media")]
+    public OverseerrMedia? Media { get; set; } = null;
+
+    [JsonPropertyName("request")]
+    public OverseerrRequest? Request { get; set; } = null;
+
+    [JsonPropertyName("issue")]
+    public OverseerrIssue? Issue { get; set; } = null;
+
+    [JsonPropertyName("comment")]
+    public OverseerrComment? Comment { get; set; } = null;
+
     public string GetNotificationTypeString()
     {
         return NotificationType switch
@@ -61,5 +73,58 @@ public class OverseerrModel
             OverseerrNotificationType.MEDIA_AUTO_REQUESTED => "Media Auto Requested",
             _ => throw new ArgumentOutOfRangeException(nameof(NotificationType), NotificationType, nameof(GetNotificationTypeString))
         };
+    }
+
+    public string GetNotificationTypeTags()
+    {
+        return NotificationType switch
+        {
+            //OverseerrNotificationType.NONE
+            OverseerrNotificationType.MEDIA_PENDING => "mag",
+            OverseerrNotificationType.MEDIA_APPROVED => "+1",
+            OverseerrNotificationType.MEDIA_AVAILABLE => "popcorn",
+            OverseerrNotificationType.MEDIA_FAILED => "x",
+            OverseerrNotificationType.TEST_NOTIFICATION => "test_tube",
+            OverseerrNotificationType.MEDIA_DECLINED => "-1",
+            OverseerrNotificationType.MEDIA_AUTO_APPROVED => "white_check_mark",
+            OverseerrNotificationType.ISSUE_CREATED => "thinking",
+            OverseerrNotificationType.ISSUE_COMMENT => "speech_balloon",
+            OverseerrNotificationType.ISSUE_RESOLVED => "ok_hand",
+            OverseerrNotificationType.ISSUE_REOPENED => "construction",
+            OverseerrNotificationType.MEDIA_AUTO_REQUESTED => "robot",
+            _ => string.Empty
+        };
+    }
+
+    public string GetNotificationTypeIcon()
+    {
+        if (Issue is not null)
+        {
+            return NotificationType switch
+            {
+                OverseerrNotificationType.ISSUE_CREATED or
+                OverseerrNotificationType.ISSUE_COMMENT or
+                OverseerrNotificationType.ISSUE_RESOLVED or
+                OverseerrNotificationType.ISSUE_REOPENED => Issue.ReportedByAvatar,
+                _ => string.Empty
+            };
+        }
+        
+        if (Request is not null)
+        {
+            return NotificationType switch
+            {
+                OverseerrNotificationType.MEDIA_PENDING or
+                OverseerrNotificationType.MEDIA_APPROVED or
+                OverseerrNotificationType.MEDIA_AVAILABLE or
+                OverseerrNotificationType.MEDIA_FAILED or
+                OverseerrNotificationType.MEDIA_DECLINED or
+                OverseerrNotificationType.MEDIA_AUTO_REQUESTED or
+                OverseerrNotificationType.MEDIA_AUTO_APPROVED => Request.RequestedByAvatar,
+                _ => string.Empty
+            };
+        }
+
+        return string.Empty;
     }
 }

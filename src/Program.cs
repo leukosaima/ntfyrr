@@ -1,10 +1,19 @@
 using System.Text.Json.Serialization;
 using ntfyrr.Middleware;
 using ntfyrr.Services;
+using ntfyrr.Models;
 
 DotNetEnv.Env.Load("./Config/.env");
 
 var builder = WebApplication.CreateBuilder(args);
+
+var secretsPath = "/run/secrets/user-credentials.json"; // Default path in container
+if (File.Exists(secretsPath))
+{
+    var secretsJson = File.ReadAllText(secretsPath);
+    var secrets = System.Text.Json.JsonSerializer.Deserialize<NtfyUser>(secretsJson);
+    builder.Services.AddSingleton(secrets!);
+}
 
 builder.WebHost.ConfigureKestrel(options =>
 {

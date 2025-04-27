@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
 using ntfyrr.Models;
@@ -7,10 +8,12 @@ namespace ntfyrr.Services;
 public class NtfyApiService
 {
     private readonly HttpClient _httpClient;
+    private readonly NtfyUser? _ntfyUser;
 
-    public NtfyApiService(HttpClient httpClient)
+    public NtfyApiService(HttpClient httpClient, NtfyUser? ntfyUser = null)
     {
         _httpClient = httpClient;
+        _ntfyUser = ntfyUser;
     }
 
     /// <summary>
@@ -26,6 +29,13 @@ public class NtfyApiService
         content.Headers.Add("X-Priority", model.Priority.ToString());
         content.Headers.Add("X-Tags", model.Tags);
         content.Headers.Add("X-Title", model.Title);
+
+        // Add authentication if credentials are available
+        if (_ntfyUser != null)
+        {
+            var authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_ntfyUser.Username}:{_ntfyUser.Password}"));
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authToken);
+        }
 
         var response = await _httpClient.PostAsync($"{DotNetEnv.Env.GetString("NTFY_URL", "https://ntfy.sh")}/{DotNetEnv.Env.GetString("TOPIC_NAME")}", content);
 

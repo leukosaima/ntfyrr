@@ -14,7 +14,9 @@ A bridge between some services' webhook notifications to ntfy, for those that do
 - `NTFY_URL` (defaults to `https://ntfy.sh`)
 - `LISTEN_PORT` (defaults to `5000`)
 
-#### Minimal docker compose example
+#### Docker compose examples
+
+##### Minimal
 
 ``` docker
 ---
@@ -29,11 +31,34 @@ services:
     restart: unless-stopped
 ```
 
+##### Self-hosted ntfy
+
+``` docker
+---
+services:
+  ntfyrr:
+    image: docker.io/leukosaima/ntfyrr:latest
+    container_name: ntfyrr
+    environment:
+      - TOPIC_NAME=my-ntfy-topic
+      - NTFY_URL=http(s)://my-ntfy-host:port
+    volumes:
+      - /path/to/user-credentials.json:/run/secrets/user-credentials.json:ro
+        no_copy: true
+    ports:
+      - 50550:5000
+    restart: unless-stopped
+```
+
+##### user-credentials.json contents
+
+``` json 
+{
+    "username": "your_username",
+    "password": "your_password"
+}
+```
+
 #### Usage
 
 Setup Webhook notifications in Overseerr, and use webhook URL `http://ntfyrr:5000/overseerr` within the same docker network, or `http://<host-ip>:50550/overseerr` within the LAN, for example.
-
----
-
-This repo is a work in progress.
-More documentation to come...

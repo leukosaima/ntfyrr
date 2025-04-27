@@ -44,7 +44,6 @@ services:
       - NTFY_URL=http(s)://my-ntfy-host:port
     volumes:
       - /path/to/user-credentials.json:/run/secrets/user-credentials.json:ro
-        no_copy: true
     ports:
       - 50550:5000
     restart: unless-stopped

@@ -4,20 +4,12 @@ using ntfyrr.Services;
 using ntfyrr.Models;
 
 DotNetEnv.Env.Load("./Config/.env");
+EnvVars.EnsureDefaults();
 
 var builder = WebApplication.CreateBuilder(args);
-
-var secretsPath = "/run/secrets/user-credentials.json"; // Default path in container
-if (File.Exists(secretsPath))
-{
-    var secretsJson = File.ReadAllText(secretsPath);
-    var secrets = System.Text.Json.JsonSerializer.Deserialize<NtfyUser>(secretsJson);
-    builder.Services.AddSingleton(secrets!);
-}
-
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.Listen(System.Net.IPAddress.Parse("0.0.0.0"), DotNetEnv.Env.GetInt("LISTEN_PORT", 5000));
+    options.Listen(System.Net.IPAddress.Parse("0.0.0.0"), DotNetEnv.Env.GetInt(EnvVars.LISTEN_PORT));
 });
 
 // Add services to the container.
@@ -30,6 +22,15 @@ builder.Services.AddControllers()
     });
 builder.Services.AddScoped<NtfyApiService>();
 builder.Services.AddHttpClient<NtfyApiService>();
+
+var secretsPath = "/run/secrets/user-credentials.json";
+NtfyUser? credentials = null;
+if (File.Exists(secretsPath))
+{
+    var secretsJson = File.ReadAllText(secretsPath);
+    credentials = System.Text.Json.JsonSerializer.Deserialize<NtfyUser>(secretsJson);
+    builder.Services.AddSingleton(credentials!);
+}
 
 var app = builder.Build();
 
@@ -45,5 +46,11 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+Console.WriteLine($"ntfyrr - Configured to send notifications to {DotNetEnv.Env.GetString(EnvVars.NTFY_URL)}/{DotNetEnv.Env.GetString(EnvVars.TOPIC_NAME)}");
+if (credentials is not null)
+{
+    Console.WriteLine($"ntfyrr - Using defined credentials for user: {credentials.Username}");
+}
 
 app.Run();

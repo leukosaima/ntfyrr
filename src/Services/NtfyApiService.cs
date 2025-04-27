@@ -37,7 +37,7 @@ public class NtfyApiService
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authToken);
         }
 
-        var response = await _httpClient.PostAsync($"{DotNetEnv.Env.GetString("NTFY_URL", "https://ntfy.sh")}/{DotNetEnv.Env.GetString("TOPIC_NAME")}", content);
+        var response = await _httpClient.PostAsync($"{DotNetEnv.Env.GetString(EnvVars.NTFY_URL)}/{DotNetEnv.Env.GetString(EnvVars.TOPIC_NAME)}", content);
 
         try
         {

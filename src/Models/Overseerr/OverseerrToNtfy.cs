@@ -28,9 +28,9 @@ public static class OverseerrToNtfy
             {overseerrModel.Event}
 
             {overseerrModel.Subject}
+            {moreInfo}
 
             {overseerrModel.Message}
-            {moreInfo}
             """;
 
         var ntfyModel = new NtfyModel

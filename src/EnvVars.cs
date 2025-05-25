@@ -6,6 +6,8 @@ public static class EnvVars
 
     public static string LISTEN_PORT = nameof(LISTEN_PORT);
 
+    public static string OVERSEERR_URL = nameof(OVERSEERR_URL);
+
     public static void EnsureDefaults()
     {
         if (string.IsNullOrWhiteSpace(DotNetEnv.Env.GetString(TOPIC_NAME)))

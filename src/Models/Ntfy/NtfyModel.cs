@@ -4,6 +4,8 @@ public class NtfyModel
 {
     public string Attach { get; init; } = string.Empty;
 
+    public string Click { get; init; } = string.Empty;
+
     public string Icon { get; init; } = string.Empty;
 
     public required string Message { get; init; }

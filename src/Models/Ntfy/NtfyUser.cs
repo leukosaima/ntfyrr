@@ -5,8 +5,11 @@ namespace ntfyrr.Models;
 public class NtfyUser
 {
     [JsonPropertyName("username")]
-    public required string Username { get; set; }
+    public string Username { get; set; } = string.Empty;
 
     [JsonPropertyName("password")]
-    public required string Password { get; set; }
+    public string Password { get; set; } = string.Empty;
+
+    [JsonPropertyName("token")]
+    public string Token { get; set; } = string.Empty;
 }

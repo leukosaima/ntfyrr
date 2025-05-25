@@ -29,12 +29,22 @@ public class NtfyApiService
         content.Headers.Add("X-Priority", model.Priority.ToString());
         content.Headers.Add("X-Tags", model.Tags);
         content.Headers.Add("X-Title", model.Title);
+        content.Headers.Add("X-Click", model.Click);
 
         // Add authentication if credentials are available
         if (_ntfyUser != null)
         {
-            var authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_ntfyUser.Username}:{_ntfyUser.Password}"));
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authToken);
+            AuthenticationHeaderValue authHeader;
+            if (!string.IsNullOrWhiteSpace(_ntfyUser.Token))
+            {
+                authHeader = new AuthenticationHeaderValue("Bearer", _ntfyUser.Token);
+            }
+            else
+            {
+                var basicAuth = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{_ntfyUser.Username}:{_ntfyUser.Password}"));
+                authHeader = new AuthenticationHeaderValue("Basic", basicAuth);
+            }
+            _httpClient.DefaultRequestHeaders.Authorization = authHeader;
         }
 
         var response = await _httpClient.PostAsync($"{DotNetEnv.Env.GetString(EnvVars.NTFY_URL)}/{DotNetEnv.Env.GetString(EnvVars.TOPIC_NAME)}", content);

@@ -40,6 +40,7 @@ public static class OverseerrToNtfy
             Attach = overseerrModel.Image,
             Tags = overseerrModel.GetNotificationTypeTags(),
             Icon = overseerrModel.GetNotificationTypeIcon(),
+            Click = string.IsNullOrWhiteSpace(DotNetEnv.Env.GetString(EnvVars.OVERSEERR_URL)) ? string.Empty : $"{DotNetEnv.Env.GetString(EnvVars.OVERSEERR_URL)}/{overseerrModel.Media?.MediaType}/{overseerrModel.Media?.TmdbId}"
         };
 
         return ntfyModel;        

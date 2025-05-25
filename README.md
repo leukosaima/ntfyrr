@@ -13,6 +13,7 @@ A bridge between some services' webhook notifications to ntfy, for those that do
 - `TOPIC_NAME` (required)
 - `NTFY_URL` (defaults to `https://ntfy.sh`)
 - `LISTEN_PORT` (defaults to `5000`)
+- `OVERSEERR_URL` (optional)
 
 #### Docker compose examples
 
@@ -42,6 +43,7 @@ services:
     environment:
       - TOPIC_NAME=my-ntfy-topic
       - NTFY_URL=http(s)://my-ntfy-host:port
+      - OVERSEERR_URL=http(s)//my-ovsr-host:port
     volumes:
       - /path/to/user-credentials.json:/run/secrets/user-credentials.json:ro
     ports:
@@ -51,13 +53,23 @@ services:
 
 ##### user-credentials.json contents
 
+For restricted topics
 ``` json 
 {
     "username": "your_username",
-    "password": "your_password"
+    "password": "your_password",
+    "token": ""
 }
 ```
-
+OR
+``` json 
+{
+    "username": "",
+    "password": "",
+    "token": "your_token"
+}
+```
+Auth via token will take precedence over username + password if all are defined.
 #### Usage
 
-Setup Webhook notifications in Overseerr, and use webhook URL `http://ntfyrr:5000/overseerr` within the same docker network, or `http://<host-ip>:50550/overseerr` within the LAN, for example.
+Setup Webhook notifications in Overseerr using the default payload it provides. Use webhook URL `http://ntfyrr:5000/overseerr` within the same docker network, or `http://<host-ip>:50550/overseerr` within the LAN, for example.

@@ -1,10 +1,10 @@
-namespace ntfyrr.Models;
+namespace ntfyrr.Models.Overseerr;
 
 public static class OverseerrToNtfy
 {
-    public static NtfyModel Convert(OverseerrModel overseerrModel)
+    public static NtfyModel Convert(OverseerrNotification overseerrModel)
     {
-        var title = $"{OverseerrModel.Prefix}{overseerrModel.GetNotificationTypeString()}";
+        var title = $"{OverseerrNotification.Prefix}{overseerrModel.GetNotificationTypeString()}";
 
         var moreInfo = string.Empty;
         if (overseerrModel.Request is not null)

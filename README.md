@@ -4,16 +4,20 @@ A bridge between some services' webhook notifications to ntfy, for those that do
 
 ---
 
-#### Services supported
+### Services supported
 
 - Overseerr
+- Maintainerr (experimental)
 
 #### Environment Variables to define when running ntfyrr
 
 - `TOPIC_NAME` (required)
 - `NTFY_URL` (defaults to `https://ntfy.sh`)
-- `LISTEN_PORT` (defaults to `5000`)
-- `OVERSEERR_URL` (optional)
+- `LISTEN_PORT` (defaults to `5000`) - The port ntfyrr listens on inside the container, at the docker network level
+
+- `OVERSEERR_URL` (optional) - To provide a link in the notification to visit your overseerr instance 
+
+- `MAINTAINERR_URL` (optional, experimental)
 
 #### Docker compose examples
 
@@ -70,6 +74,13 @@ OR
 }
 ```
 Auth via token will take precedence over username + password if all are defined.
-#### Usage
+
+### Usage
+
+#### Overseerr
 
 Setup Webhook notifications in Overseerr using the default payload it provides. Use webhook URL `http://ntfyrr:5000/overseerr` within the same docker network, or `http://<host-ip>:50550/overseerr` within the LAN, for example.
+
+#### Maintainerr
+
+Setup Webhook notifications, use webhook URL `http://ntfyrr:5000/maintainerr` within the same docker network, or `http://<host-ip>:50550/maintainerr` within the LAN, for example.

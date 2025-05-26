@@ -1,12 +1,12 @@
 using System.Text.Json.Serialization;
 
-namespace ntfyrr.Models;
+namespace ntfyrr.Models.Overseerr;
 
 /// <summary>
 /// Model for the default Overseerr webhook payload.
 /// https://docs.overseerr.dev/using-overseerr/notifications/webhooks#template-variables
 /// </summary>
-public class OverseerrModel
+public class OverseerrNotification
 {
     public const string Prefix = "Overseerr - ";
 

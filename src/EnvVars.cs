@@ -8,6 +8,8 @@ public static class EnvVars
 
     public static string OVERSEERR_URL = nameof(OVERSEERR_URL);
 
+    public static string MAINTAINERR_URL = nameof(MAINTAINERR_URL);
+
     public static void EnsureDefaults()
     {
         if (string.IsNullOrWhiteSpace(DotNetEnv.Env.GetString(TOPIC_NAME)))

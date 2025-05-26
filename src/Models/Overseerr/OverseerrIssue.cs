@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace ntfyrr.Models;
+namespace ntfyrr.Models.Overseerr;
 
 public class OverseerrIssue
 {

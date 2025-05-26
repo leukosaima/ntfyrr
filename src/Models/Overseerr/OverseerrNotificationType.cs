@@ -1,4 +1,4 @@
-namespace ntfyrr.Models;
+namespace ntfyrr.Models.Overseerr;
 
 public enum OverseerrNotificationType
 {

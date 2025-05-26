@@ -1,31 +1,29 @@
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using ntfyrr.Models;
+using ntfyrr.Models.Maintainerr;
 using ntfyrr.Services;
-using System.Text;
 
-namespace ntfyrr.Controllers;
+namespace ntfyrr.Controllers.Maintainerr;
 
 [ApiController]
 [Route("[controller]")]
-public class OverseerrController : ControllerBase
+public class MaintainerrController : ControllerBase
 {
     private readonly NtfyApiService _ntfyApiService;
 
-    public OverseerrController(NtfyApiService ntfyApiServivce)
+    public MaintainerrController(NtfyApiService ntfyApiServivce)
     {
         _ntfyApiService = ntfyApiServivce;
     }
 
     [HttpPost]
-    public async Task<IActionResult> PostPayload([FromBody] OverseerrModel payload)
+    public async Task<IActionResult> PostPayload([FromBody] MaintainerrNotification payload)
     {
         if (payload == null)
         {
             return BadRequest("Invalid payload.");
         }
 
-        var result = await _ntfyApiService.SendDataAsync(OverseerrToNtfy.Convert(payload));
+        var result = await _ntfyApiService.SendDataAsync(MaintainerrToNtfy.Convert(payload));
 
         if (result)
         {

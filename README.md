@@ -2,6 +2,8 @@
 
 A bridge between some services' webhook notifications to ntfy, for those that don't currently support ntfy natively.
 
+Have the service send its default json payload as a webhook to ntfyrr, and ntfyrr will format it nicer and forward the notification to your ntfy instance.
+
 ---
 
 ### Services supported

@@ -47,9 +47,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-Console.WriteLine($"ntfyrr - Configured to send notifications to {DotNetEnv.Env.GetString(EnvVars.NTFY_URL)}/{DotNetEnv.Env.GetString(EnvVars.TOPIC_NAME)}");
-Console.WriteLine($"ntfyrr - Configured Overseerr URL: {DotNetEnv.Env.GetString(EnvVars.OVERSEERR_URL, "**NOT SET**")}");
-Console.WriteLine($"ntfyrr - Configured Maintainerr URL: {DotNetEnv.Env.GetString(EnvVars.MAINTAINERR_URL, "**NOT SET**")}");
+EnvVars.WriteToConsole();
 
 if (credentials is not null)
 {

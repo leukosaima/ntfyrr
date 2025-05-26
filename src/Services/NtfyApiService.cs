@@ -20,7 +20,7 @@ public class NtfyApiService
     /// Sends data to the ntfy.sh API.
     /// https://docs.ntfy.sh/publish/
     /// </summary>
-    public async Task<bool> SendDataAsync(NtfyModel model)
+    public async Task<bool> SendDataAsync(NtfyModel model, string topicName)
     {
         var content = new StringContent(model.Message, Encoding.UTF8, MediaTypeNames.Text.Plain);
         content.Headers.Add("X-Attach", model.Attach);
@@ -47,7 +47,7 @@ public class NtfyApiService
             _httpClient.DefaultRequestHeaders.Authorization = authHeader;
         }
 
-        var response = await _httpClient.PostAsync($"{DotNetEnv.Env.GetString(EnvVars.NTFY_URL)}/{DotNetEnv.Env.GetString(EnvVars.TOPIC_NAME)}", content);
+        var response = await _httpClient.PostAsync($"{DotNetEnv.Env.GetString(EnvVars.NTFY_URL)}/{topicName}", content);
 
         try
         {

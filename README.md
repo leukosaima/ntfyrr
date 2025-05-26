@@ -11,12 +11,11 @@ A bridge between some services' webhook notifications to ntfy, for those that do
 
 #### Environment Variables to define when running ntfyrr
 
-- `TOPIC_NAME` (required)
 - `NTFY_URL` (defaults to `https://ntfy.sh`)
 - `LISTEN_PORT` (defaults to `5000`) - The port ntfyrr listens on inside the container, at the docker network level
-
+- `OVERSEERR_TOPIC` (defaults to `overseerr`)
 - `OVERSEERR_URL` (optional) - To provide a link in the notification to visit your overseerr instance 
-
+- `MAINTAINERR_TOPIC` (defaults to `maintainerr`, experimental)
 - `MAINTAINERR_URL` (optional, experimental)
 
 #### Docker compose examples
@@ -30,7 +29,7 @@ services:
     image: docker.io/leukosaima/ntfyrr:latest
     container_name: ntfyrr
     environment:
-      - TOPIC_NAME=my-ntfy-topic
+      - OVERSEERR_TOPIC=my-ntfy-topic
     ports:
       - 50550:5000
     restart: unless-stopped
@@ -45,7 +44,7 @@ services:
     image: docker.io/leukosaima/ntfyrr:latest
     container_name: ntfyrr
     environment:
-      - TOPIC_NAME=my-ntfy-topic
+      - OVERSEERR_TOPIC=my-ntfy-topic
       - NTFY_URL=http(s)://my-ntfy-host:port
       - OVERSEERR_URL=http(s)//my-ovsr-host:port
     volumes:

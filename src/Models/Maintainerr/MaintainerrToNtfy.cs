@@ -32,7 +32,7 @@ public static class MaintainerrToNtfy
         {
             Title = title,
             Message = message,
-            Click = string.IsNullOrWhiteSpace(DotNetEnv.Env.GetString(EnvVars.MAINTAINERR_URL)) ? string.Empty : $"{DotNetEnv.Env.GetString(EnvVars.MAINTAINERR_URL)}"
+            Click = $"{DotNetEnv.Env.GetString(EnvVars.MAINTAINERR_URL)}"
         };
 
         return ntfyModel;        

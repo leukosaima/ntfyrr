@@ -23,7 +23,7 @@ public class OverseerrController : ControllerBase
             return BadRequest("Invalid payload.");
         }
 
-        var result = await _ntfyApiService.SendDataAsync(OverseerrToNtfy.Convert(payload));
+        var result = await _ntfyApiService.SendDataAsync(OverseerrToNtfy.Convert(payload), DotNetEnv.Env.GetString(EnvVars.OVERSEERR_TOPIC));
 
         if (result)
         {

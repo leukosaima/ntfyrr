@@ -23,7 +23,7 @@ public class MaintainerrController : ControllerBase
             return BadRequest("Invalid payload.");
         }
 
-        var result = await _ntfyApiService.SendDataAsync(MaintainerrToNtfy.Convert(payload));
+        var result = await _ntfyApiService.SendDataAsync(MaintainerrToNtfy.Convert(payload), DotNetEnv.Env.GetString(EnvVars.MAINTAINERR_TOPIC));
 
         if (result)
         {

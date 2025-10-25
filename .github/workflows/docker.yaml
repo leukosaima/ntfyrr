@@ -81,3 +81,34 @@ jobs:
         run: |
           docker pull ${{ github.event.repository.full_name }}:${{ steps.meta.outputs.version }}
           docker image inspect ${{ github.event.repository.full_name }}:${{ steps.meta.outputs.version }}
+
+      - name: Update release with Docker links
+        if: github.event_name == 'release'
+        run: |
+          RELEASE_BODY=$(cat << 'EOF'
+          ## Docker Images
+          
+          Pull the image:
+          ```bash
+          docker pull ${{ github.event.repository.full_name }}:${{ steps.meta.outputs.version }}
+          ```
+          
+          Or use GitHub Container Registry:
+          ```bash
+          docker pull ghcr.io/${{ github.event.repository.full_name }}:${{ steps.meta.outputs.version }}
+          ```
+          
+          Available tags:
+          - `${{ steps.meta.outputs.version }}`
+          - `latest` (for stable releases)
+          EOF
+          )
+          
+          CURRENT_BODY=$(gh api repos/${{ github.repository }}/releases/${{ github.event.release.id }} --jq .body)
+          NEW_BODY="${CURRENT_BODY}\n\n${RELEASE_BODY}"
+          
+          gh api repos/${{ github.repository }}/releases/${{ github.event.release.id }} \
+            -X PATCH \
+            -f body="${NEW_BODY}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

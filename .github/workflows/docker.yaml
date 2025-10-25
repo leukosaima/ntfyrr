@@ -82,6 +82,26 @@ jobs:
           docker pull ${{ github.event.repository.full_name }}:${{ steps.meta.outputs.version }}
           docker image inspect ${{ github.event.repository.full_name }}:${{ steps.meta.outputs.version }}
 
+      - name: Update previous release to remove latest tag
+        if: github.event_name == 'release' && github.event.release.prerelease == false
+        run: |
+          # Get the previous release (skip the current one)
+          PREV_RELEASE=$(gh api repos/${{ github.repository }}/releases \
+            --jq '.[] | select(.prerelease == false and .id != ${{ github.event.release.id }}) | .id' \
+            | head -n 1)
+          
+          if [ -n "$PREV_RELEASE" ]; then
+            PREV_BODY=$(gh api repos/${{ github.repository }}/releases/$PREV_RELEASE --jq .body)
+            # Remove the latest tag line
+            UPDATED_BODY=$(echo "$PREV_BODY" | sed '/- `latest`/d')
+            
+            gh api repos/${{ github.repository }}/releases/$PREV_RELEASE \
+              -X PATCH \
+              -f body="$UPDATED_BODY"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update release with Docker links
         if: github.event_name == 'release'
         run: |
@@ -100,12 +120,18 @@ jobs:
           
           Available tags:
           - `${{ steps.meta.outputs.version }}`
-          - `latest` (for stable releases)
           EOF
           )
           
+          # Add latest tag info only for stable releases
+          if [ "${{ github.event.release.prerelease }}" == "false" ]; then
+            RELEASE_BODY="${RELEASE_BODY}\n          - \`latest\`"
+          fi
+          
           CURRENT_BODY=$(gh api repos/${{ github.repository }}/releases/${{ github.event.release.id }} --jq .body)
-          NEW_BODY="${CURRENT_BODY}\n\n${RELEASE_BODY}"
+          NEW_BODY="${CURRENT_BODY}
+          
+          ${RELEASE_BODY}"
           
           gh api repos/${{ github.repository }}/releases/${{ github.event.release.id }} \
             -X PATCH \

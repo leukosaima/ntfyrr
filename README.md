@@ -9,7 +9,7 @@ Have the service send its default json payload as a webhook to ntfyrr, and ntfyr
 ### Services supported
 
 - Overseerr
-- Maintainerr (experimental)
+- Maintainerr
 
 #### Environment Variables to define when running ntfyrr
 
@@ -17,8 +17,8 @@ Have the service send its default json payload as a webhook to ntfyrr, and ntfyr
 - `LISTEN_PORT` (defaults to `5000`) - The port ntfyrr listens on inside the container, at the docker network level
 - `OVERSEERR_TOPIC` (defaults to `overseerr`)
 - `OVERSEERR_URL` (optional) - To provide a link in the notification to visit your overseerr instance 
-- `MAINTAINERR_TOPIC` (defaults to `maintainerr`, experimental)
-- `MAINTAINERR_URL` (optional, experimental)
+- `MAINTAINERR_TOPIC` (defaults to `maintainerr`)
+- `MAINTAINERR_URL` (optional) - To provide a link in the notification to visit your maintainerr instance 
 
 #### Docker compose examples
 
@@ -84,4 +84,4 @@ Setup Webhook notifications in Overseerr using the default payload it provides. 
 
 #### Maintainerr
 
-Setup Webhook notifications, use webhook URL `http://ntfyrr:5000/maintainerr` within the same docker network, or `http://<host-ip>:50550/maintainerr` within the LAN, for example.
+Setup Webhook notifications in Maintainerr using the default payload it provides. Use webhook URL `http://ntfyrr:5000/maintainerr` within the same docker network, or `http://<host-ip>:50550/maintainerr` within the LAN, for example.

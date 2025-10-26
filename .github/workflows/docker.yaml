@@ -125,7 +125,8 @@ jobs:
           
           # Add latest tag info only for stable releases
           if [ "${{ github.event.release.prerelease }}" == "false" ]; then
-            RELEASE_BODY="${RELEASE_BODY}\n          - \`latest\`"
+            RELEASE_BODY="${RELEASE_BODY}
+            - \`latest\`"
           fi
           
           CURRENT_BODY=$(gh api repos/${{ github.repository }}/releases/${{ github.event.release.id }} --jq .body)

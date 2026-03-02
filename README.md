@@ -4,6 +4,8 @@ A bridge between some services' webhook notifications to ntfy, for those that do
 
 Have the service send its default json payload as a webhook to ntfyrr, and ntfyrr will format it nicer and forward the notification to your ntfy instance.
 
+> Note: Seerr, successor to overseerr/jellyseerr, now has native ntfy.sh support: https://docs.seerr.dev/using-seerr/notifications/ntfy
+
 ---
 
 ### Services supported

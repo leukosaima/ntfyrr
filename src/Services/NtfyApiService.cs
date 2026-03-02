@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
+using System.Net;
 using ntfyrr.Models;
 
 namespace ntfyrr.Services;
@@ -22,7 +23,8 @@ public class NtfyApiService
     /// </summary>
     public async Task<bool> SendDataAsync(NtfyModel model, string topicName)
     {
-        var content = new StringContent(model.Message, Encoding.UTF8, MediaTypeNames.Text.Plain);
+        var encodedMessage = WebUtility.HtmlEncode(model.Message);
+        var content = new StringContent(encodedMessage, Encoding.UTF8, MediaTypeNames.Text.Plain);
         content.Headers.Add("X-Attach", model.Attach);
         content.Headers.Add("X-Icon", model.Icon);
         content.Headers.Add("X-Markdown", "true");

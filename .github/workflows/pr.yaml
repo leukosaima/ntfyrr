@@ -1,0 +1,16 @@
+name: pr
+
+on:
+  pull_request:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  dotnet:
+    uses: leukosaima/gh-actions/.github/workflows/dotnet-build.yaml@main
+    with:
+      target: ntfyrr.sln
+      dotnet-version: 10.0.x
+      configuration: Release

@@ -9,7 +9,7 @@ permissions:
 
 jobs:
   dotnet:
-    uses: leukosaima/gh-actions/.github/workflows/dotnet-build.yaml@main
+    uses: leukosaima/gh-actions/.github/workflows/dotnet-build.yaml@3af67032ebad47047e0799050e12d0ddf912bac6 # main
     with:
       target: ntfyrr.sln
       dotnet-version: 10.0.x

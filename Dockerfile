@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:4fdf1efc2eedaf10b7f42cc7584f71d429dc85bafce662113048bfbaaea5970e AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine@sha256:fac7cce841f78faa4bca416fb4c636d1a129c09abd9b50e9b45664b95fd008a0 AS build
 WORKDIR /app
 
 COPY ./src ./
@@ -8,7 +8,7 @@ RUN dotnet restore
 RUN dotnet publish -c Release -o out
 
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:6327ae0927b5623617cf8437302e3f2700f01898e86bba60ec2e0971ce7c3add AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine@sha256:f03685b2735e0d3d25d6c60672e74b21bb6334f1402f71bae2d2cf02307163cd AS runtime
 WORKDIR /app
 
 COPY --from=build /app/out .

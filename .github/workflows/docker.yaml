@@ -13,5 +13,5 @@ permissions:
 jobs:
   docker:
     name: build-publish
-    uses: leukosaima/gh-actions/.github/workflows/docker-github-builder.yaml@bd2ed14bf9edef8513872155b60038696e95e3d8 # main
+    uses: leukosaima/gh-actions/.github/workflows/docker-github-builder.yaml@56af9f257468e04fd140d2e61b846b8a54fd31f2 # main
     secrets: inherit
